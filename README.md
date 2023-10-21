@@ -1,66 +1,28 @@
-## Foundry
+# Forge Base Project
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+### Do not repeat yourself
 
-Foundry consists of:
+Minimalistic initialization project that sets up a simple forge project. 
+It comes with a makefile, toml and .env that are always shared among simple learning projects (e.g. foundry full course, ..).
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+## What's used for
 
-## Documentation
-
-https://book.getfoundry.sh/
+1. to be consistent: `make push` every morning after your first glass of water
+2. have a reference (makefile) for libs used in the past
+3. do not repeat coding patterns (deploy contract, network configuration..)
 
 ## Usage
 
-### Build
+1. Remove unused libraries in makefile and `make install`
+2. Remove unused remappings on `toml` file
 
-```shell
-$ forge build
-```
+## Todos
+1. order makefile per command name and add comments
+2. add options in toml
 
-### Test
+## General setup:
 
-```shell
-$ forge test
-```
-
-### Format
-
-```shell
-$ forge fmt
-```
-
-### Gas Snapshots
-
-```shell
-$ forge snapshot
-```
-
-### Anvil
-
-```shell
-$ anvil
-```
-
-### Deploy
-
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+1. `forge init`
+2. added a deploy script to basic contract `InitMe`
+3. added general makefile
+4. added general .env
