@@ -35,15 +35,14 @@ contract GovernorTest is Test {
         timelock = new Timelock(MIN_DELAY, proposers, executors, address(this)); // set admin here! otherwise the test contract cannot change roles
         governor = new GovernorController(governanceToken, timelock);
 
-        //1. grant governer Timelock roles -> deprecated //error from AccessControl.sol >> checkRole AccessControlUnauthorizedAccount. It was already given to the governor!
-        //2. remove timelock as admin -> deprecated
+        //1. grant governer Timelock roles
         bytes32 proposerRole = timelock.PROPOSER_ROLE();
         bytes32 executorRole = timelock.EXECUTOR_ROLE();
         bytes32 adminRole = timelock.DEFAULT_ADMIN_ROLE();
 
         timelock.grantRole(proposerRole, address(governor));
         timelock.grantRole(executorRole, address(0));
-        //revoke admin role > we build a full decentralized dao!
+        //2. revoke admin role > we build a full decentralized dao!
         timelock.revokeRole(adminRole, address(this));
 
         // the DAO (governor) has a
