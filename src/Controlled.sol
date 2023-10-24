@@ -9,7 +9,6 @@ contract Controlled is Ownable {
     event Controlled_value_changed(address indexed actor);
 
     constructor(address owner) Ownable(owner) {
-        owner = msg.sender;
     }
 
     /**

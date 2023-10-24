@@ -5,7 +5,7 @@ include .env #source .env on terminal
 
 push:
 	git add .
-	git commit -m "set up contracts and init test"
+	git commit -m "test dao process"
 	git push origin master
 
 
