@@ -17,7 +17,7 @@ contract GovernorTest is Test {
     address public ALICE = makeAddr("alice");
     uint256 public constant INITIAL_SUPPLY = 100 ether;
     uint256 public constant MIN_DELAY = 3600; //1 hour - delay after the vote passes: no one can execute a proposal until this time has passed
-    uint256 public constant ACTIVE_PROPOSAL_WAITING_TIME = 7200; // 1 day - defined in governor
+    uint256 public constant ACTIVE_PROPOSAL_DELAY = 7200; // 1 day - defined in governor
     uint256 public constant FINISH_CASTING_PERIOD = 50400; // 1 week - defined in governor [cast = emettere un voto]
 
     address[] proposers; //if empty, anyone can propose
@@ -72,7 +72,8 @@ contract GovernorTest is Test {
         // 3. update blockchain to fake time has passed -> add 1 block + time
         // warp = distorcere [the blockchain]
         // vm.warp(block.timestamp + ACTIVE_PROPOSAL_WAITING_TIME + 1); // sets block.timestamp >> useless
-        vm.roll(block.number + ACTIVE_PROPOSAL_WAITING_TIME + 1); // sets block.number - min 1 block per second is needed
+        vm.roll(block.number + ACTIVE_PROPOSAL_DELAY + 1); // sets block.number - min 1 block per second is needed
+        // vm.warp(block.number + ACTIVE_PROPOSAL_DELAY + 1); not needed
 
         // 4. state active snapshot = 7201
         console.log("state proposal ", uint256(governor.state(proposalId)));
@@ -86,19 +87,20 @@ contract GovernorTest is Test {
 
         // 6. speed up the week
         vm.roll(block.number + FINISH_CASTING_PERIOD + 1);
-
-        //logging accounts
+        // vm.warp(block.number + FINISH_CASTING_PERIOD + 1); not needed
 
         // 7. Queue tx
-        governor.queue(targets, values, calldatas, keccak256(abi.encodePacked(description)));
+        bytes32 descriptionHash = keccak256(abi.encodePacked(description));
+        governor.queue(targets, values, calldatas, descriptionHash);
 
-        // // TIME wait that people can go out before executing
-        // vm.roll(block.number + MIN_DELAY + 1);
+        // TIME wait that people can go out before executing
+        vm.roll(block.number + MIN_DELAY + 1);
+        vm.warp(block.timestamp + MIN_DELAY + 1);
 
         // 8. Execute tx
-        // governor.execute(targets, values, calldatas, keccak256(abi.encodePacked(description)));
+        governor.execute(targets, values, calldatas, descriptionHash);
 
         // 9. Check if number is set to 123
-        // assertEq(controlled.getValue(), numberToStore);
+        assertEq(controlled.getValue(), numberToStore);
     }
 }
