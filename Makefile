@@ -5,7 +5,7 @@ include .env #source .env on terminal
 
 push:
 	git add .
-	git commit -m "init"
+	git commit -m "set up contracts and init test"
 	git push origin master
 
 
